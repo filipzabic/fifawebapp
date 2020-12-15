@@ -1,4 +1,4 @@
-from bottle import route, run, debug, template, request, static_file, app, auth_basic, abort
+from bottle import route, run, template, request, static_file, auth_basic, abort
 import json
 import os
 import redis
@@ -59,8 +59,8 @@ def operate():
 url = urlparse(os.environ.get('REDISCLOUD_URL'))
 r = redis.Redis(host=url.hostname, port=url.port, password=url.password)
 # r = redis.Redis(host='localhost', port=6379, db=0)
-r.set('filip', 65)
-r.set('nikola', 47)
+r.set('filip', 47)
+r.set('nikola', 65)
 
 # host="0.0.0.0"
 
