@@ -1,9 +1,8 @@
 from bottle import route, run, debug, template, request, static_file, app, auth_basic, abort
 import json
 import os
-
-with open("results.json", 'r') as file:
-    results = json.load(file)
+import redis
+from urllib.parse import urlparse
 
 
 def is_authenticated(user, password):
@@ -13,7 +12,7 @@ def is_authenticated(user, password):
 @route('/')
 @auth_basic(is_authenticated)
 def main():
-    return template('web/index.tpl', filip=results['filip'], nikola=results['nikola'])
+    return template('web/index.tpl', filip=r.get('filip'), nikola=r.get('nikola'))
 
 
 @route('/assets/<filepath:path>')
@@ -31,30 +30,37 @@ def operate():
     id = request.params.get('id', 0, type=str)
 
     if id == "add_filip":
-        results['filip'] = results['filip'] + 1
+        previous = int(r.get('filip'))
+        r.set('filip', previous + 1)
         element = 'filip'
-        value = results['filip']
-        print(value)
+        value = int(r.get('filip'))
 
     elif id == "subtract_filip":
-        results['filip'] = results['filip'] - 1
+        previous = int(r.get('filip'))
+        r.set('filip', previous - 1)
         element = 'filip'
-        value = results['filip']
+        value = int(r.get('filip'))
 
     elif id == "add_nikola":
-        results['nikola'] = results['nikola'] + 1
+        previous = int(r.get('nikola'))
+        r.set('nikola', previous + 1)
         element = 'nikola'
-        value = results['nikola']
+        value = int(r.get('nikola'))
 
     elif id == "subtract_nikola":
-        results['nikola'] = results['nikola'] - 1
+        previous = int(r.get('nikola'))
+        r.set('nikola', previous - 1)
         element = 'nikola'
-        value = results['nikola']
-
-    with open('results.json', 'w') as file:
-        json.dump(results, file)
+        value = int(r.get('nikola'))
 
     return json.dumps({'result': value, 'element': '#' + element})
 
+
+url = urlparse(os.environ.get('REDISCLOUD_URL'))
+r = redis.Redis(host=url.hostname, port=url.port, password=url.password)
+r.set('filip', 65)
+r.set('nikola', 47)
+
+# host="0.0.0.0"
 
 run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
