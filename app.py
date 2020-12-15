@@ -59,8 +59,12 @@ def operate():
 url = urlparse(os.environ.get('REDISCLOUD_URL'))
 r = redis.Redis(host=url.hostname, port=url.port, password=url.password)
 # r = redis.Redis(host='localhost', port=6379, db=0)
-r.set('filip', 47)
-r.set('nikola', 65)
+if r.exists('set'):
+    pass
+else:
+    r.set('set', 1)
+    r.set('filip', 65)
+    r.set('nikola', 47)
 
 # host="0.0.0.0"
 
