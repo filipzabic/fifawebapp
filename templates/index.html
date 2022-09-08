@@ -2,7 +2,6 @@
 <html lang="en">
     <head>
       <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>FIFA Game Score</title>
       <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
     </head>
@@ -34,12 +33,12 @@
   });
 </script>
 
-<nav>
+<nav class="container">
   <ul>
-    <li><strong>FIFA Game Score</strong></li>
+    <li><strong>FIFA Score Counter</strong></li>
   </ul>
   <ul>
-    <li><a href="/logout" role="button">Log out</a></li>
+    <li><a href="#" role="button">Logout</a></li>
   </ul>
 </nav>
 
@@ -49,7 +48,7 @@
     <div style="text-align: center;">
       <article>
         <h3>Filip</h3>
-        <img src="/static/filip.jpg">
+        <img src="/static/filip.jpg" style="border-radius: 50%;">
         <h1 id="filip">{{filip}}</h1>
         <button id="add_filip">+</button>
         <button id="subtract_filip">-</button>
@@ -59,7 +58,7 @@
     <div style="text-align: center;">
       <article>
         <h3>Nikola</h3>
-        <img src="/static/nikola.jpg">
+        <img src="/static/nikola.jpg" style="border-radius: 50%;">
         <h1 id="nikola">{{nikola}}</h1>
         <button id="add_nikola">+</button>
         <button id="subtract_nikola">-</button>

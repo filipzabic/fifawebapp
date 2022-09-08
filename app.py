@@ -26,6 +26,10 @@ def logout():
 
     return resp
 
+@route('/test')
+def login():
+    return template('login.html')
+
 
 @route('/_operate')
 def operate():
