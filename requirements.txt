@@ -1,3 +1,5 @@
-bottle
+flask
 redis
 gunicorn
+pyjwt
+python-dotenv
