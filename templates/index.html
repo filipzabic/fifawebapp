@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>FIFA Game Score</title>
+      <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    </head>
+<body>
+
+<script type="text/javascript"
+  src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+</script>
+
+<script type="text/javascript">
+
+  $(function() {
+    var submit_form = function(e) {
+      $.getJSON('\_operate', {
+        id: $(this).attr('id')
+      }, function(data) {
+        var element = data.element;
+        $(element).text(data.result);
+      });
+      return false;
+    };
+
+    $('#add_nikola').bind('click', submit_form);
+    $('#subtract_nikola').bind('click', submit_form);
+
+    $('#add_filip').bind('click', submit_form);
+    $('#subtract_filip').bind('click', submit_form);
+
+  });
+</script>
+
+<nav>
+  <ul>
+    <li><strong>FIFA Game Score</strong></li>
+  </ul>
+  <ul>
+    <li><a href="/logout" role="button">Log out</a></li>
+  </ul>
+</nav>
+
+<main class="container" style="padding-top: 0;">
+  <div class="grid">
+
+    <div style="text-align: center;">
+      <article>
+        <h3>Filip</h3>
+        <img src="/static/filip.jpg">
+        <h1 id="filip">{{filip}}</h1>
+        <button id="add_filip">+</button>
+        <button id="subtract_filip">-</button>
+      </article>
+    </div>
+
+    <div style="text-align: center;">
+      <article>
+        <h3>Nikola</h3>
+        <img src="/static/nikola.jpg">
+        <h1 id="nikola">{{nikola}}</h1>
+        <button id="add_nikola">+</button>
+        <button id="subtract_nikola">-</button>
+      </article>
+    </div>
+
+  </div>
+</main>
+
+</body>
+</html>
