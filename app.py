@@ -1,4 +1,5 @@
-from flask import Flask, request, abort, redirect, url_for, make_response
+from functools import wraps
+from flask import Flask, request, abort, redirect, url_for, make_response, send_from_directory
 from flask import render_template as template
 import jwt
 import base64
@@ -14,24 +15,56 @@ app = Flask(__name__, template_folder='templates', static_folder='static')
 route = app.route
 
 
+@route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+def authorize(f):
+    @wraps(f)
+    def decorated_function(*args, **kws):
+
+        if request.cookies.get('access'):
+            return f(*args, **kws)
+        else:
+            return redirect(url_for('login'))      
+     
+    return decorated_function
+
+
 @route('/')
-def main():
+@authorize
+def index():
     return template('index.html', filip=int(r.get('filip')), nikola=int(r.get('nikola')))
 
 
 @route('/logout')
 def logout():
-    resp = make_response()
-    resp.set_cookie('access.5nx86dyn', '', expires=0)
+    resp = make_response(redirect('/login'))
+    resp.set_cookie('access', '', expires=0)
 
     return resp
 
-@route('/test')
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return template('login.html')
+    error = None
+
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'fifa':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            resp = make_response(redirect('/'))
+            resp.set_cookie('access', 'granted')
+
+            return resp
+
+    return template('login.html', error=error)
 
 
 @route('/_operate')
+@authorize
 def operate():
     id = request.args.get('id', 0, type=str)
 
